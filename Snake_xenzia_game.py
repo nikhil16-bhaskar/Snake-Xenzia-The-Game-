@@ -1,5 +1,6 @@
 import pygame
 import time
+import random
 
 pygame.init() #initialize a game
 #declaring the colours in RGB in tuples wecan also do it in list.
@@ -33,7 +34,8 @@ def gameLoop():
     lead_y=display_width/2 #starting y co-ordinates of block.
     lead_x_change=0 #change in x co-ordinate from starting point 
     lead_y_change=0 #change in y co-ordinate from starting point
-        
+    randAppleX=random.randrange(0,display_width-block_size)
+    randAppleY=random.randrange(0,display_height-block_size)
                 
     while not gameExit:
         while gameOver == True:
@@ -83,6 +85,7 @@ def gameLoop():
             #break
         #print("lead_changed")
         gameDisplay.fill(white) #set the background of game ,white
+        pygame.draw.rect(gameDisplay,red,[randAppleX,randAppleY,block_size,block_size])
         pygame.draw.rect(gameDisplay,black,[lead_x,lead_y,block_size,block_size])# to draw rectangle on gaming screen,so 1st parameter is where do we want to draw it,2nd what colour,3rd a list of[x-cordinate,y-cordinate,height of rect,width of rect].
         
         #(this is more accelerated)gameDisplay.fill(red,rect=[200,200,30,30])#fill is also used to draw shapes.parameters are 1st colour of shape,2nd shapename=[x-cordinate,y-cordinate,height,width].
