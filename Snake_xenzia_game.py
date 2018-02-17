@@ -7,6 +7,7 @@ pygame.init() #initialize a game
 white = (255,255,255)
 black = (0,0,0)
 red = (255,0,0)
+green = (0,155,0)
 display_width=800
 display_height=600
 gameDisplay = pygame.display.set_mode((display_width,display_height)) #setting surface or display for the game 800 and 600 are lenngth and width pixels in a tuple.
@@ -20,7 +21,11 @@ clock=pygame.time.Clock() #it is used to set the fps(frames per second) of the g
 
 
 font=pygame.font.SysFont(None,25)
+def Snake(block_size,snakeList):
+    for Xny in snakeList:
+        pygame.draw.rect(gameDisplay,green,[Xny[0],Xny[1],block_size,block_size])
 
+    
 def message_to_screen(msg,colour):
     screen_text=font.render(msg,True,colour)
     gameDisplay.blit(screen_text,[display_width/2,display_height/2])
@@ -36,7 +41,8 @@ def gameLoop():
     lead_y_change=0 #change in y co-ordinate from starting point
     randAppleX=round(random.randrange(0,display_width-block_size)/10.0)*10.0
     randAppleY=round(random.randrange(0,display_height-block_size)/10.0)*10.0
-                
+    snakeList=[]
+    snakeLength=1
     while not gameExit:
         while gameOver == True:
             gameDisplay.fill(white)           
@@ -86,14 +92,29 @@ def gameLoop():
         #print("lead_changed")
         gameDisplay.fill(white) #set the background of game ,white
         pygame.draw.rect(gameDisplay,red,[randAppleX,randAppleY,block_size,block_size])
-        pygame.draw.rect(gameDisplay,black,[lead_x,lead_y,block_size,block_size])# to draw rectangle on gaming screen,so 1st parameter is where do we want to draw it,2nd what colour,3rd a list of[x-cordinate,y-cordinate,height of rect,width of rect].
+
+        
+        snakeHead=[]
+        snakeHead.append(lead_x)
+        snakeHead.append(lead_y)
+        snakeList.append(snakeHead)
+        if len(snakeList)>snakeLength:
+            del snakeList[0]
+        for eachSegment in snakeList[:-1]:
+            if eachSegment == snakeHead:
+                gameOver=True
+            
+        Snake(block_size,snakeList)
+        # to draw rectangle on gaming screen,so 1st parameter is where do we want to draw it,2nd what colour,3rd a list of[x-cordinate,y-cordinate,height of rect,width of rect].
         
         #(this is more accelerated)gameDisplay.fill(red,rect=[200,200,30,30])#fill is also used to draw shapes.parameters are 1st colour of shape,2nd shapename=[x-cordinate,y-cordinate,height,width].
         
         pygame.display.update()#then update all changes
 
         if lead_x == randAppleX and lead_y == randAppleY:
-            print("om nom nom")
+            randAppleX=round(random.randrange(0,display_width-block_size)/10.0)*10.0
+            randAppleY=round(random.randrange(0,display_height-block_size)/10.0)*10.0
+            snakeLength+=1
         clock.tick(FPS)#we have set fps=20
 
     
